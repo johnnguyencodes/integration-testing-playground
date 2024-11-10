@@ -29,3 +29,22 @@ test('screenshot test', async ({ page }) => {
 
   await expect(table).toHaveScreenshot({ maxDiffPixels: 100 });
 });
+
+// mocking APIs with playwright
+test.use({
+  recordHar: {
+    mode: 'minimal',
+    path: '/Users/johnnguyen/Projects/integration-testing-playground/network-requests.har',
+    urlFilter: '**/api**',
+  },
+  serviceWorkers: 'block',
+});
+
+test('test with har', async ({ page }) => {
+  await page.goto('http://localhost:3000/');
+  await page.getByRole('link', { name: 'Pokémon Search' }).click();
+  await page.getByTestId('search').click();
+  await page.getByTestId('search').fill('Bulbasaur');
+  await page.goto('http://localhost:3000/pokemon-search?name=Bulbasaur');
+  await page.getByTestId('1').click();
+});
