@@ -16,3 +16,16 @@ test('get started link', async ({ page }) => {
   // Expects page to have a heading with the name of Installation.
   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
 });
+
+// creating a test screenshot
+test('screenshot test', async ({ page }) => {
+  await page.goto('http://localhost:3000/secret-menu');
+  await page.getByRole('link', { name: 'Secret Menu' }).click();
+  const restaurantSelect = page.getByRole('combobox', { name: 'Restaurant' });
+  await restaurantSelect.selectOption('Jack In The Box');
+  const table = page.getByText(
+    'Secret Menu Items (Download) Minimum Rating: 1 Restaurant AllChick-fil-',
+  );
+
+  await expect(table).toHaveScreenshot({ maxDiffPixels: 100 });
+});
